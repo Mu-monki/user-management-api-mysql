@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS users (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    address TEXT NOT NULL,
+    post_code VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL,
+    is_active TINYINT(2) NOT NULL DEFAULT 1
+);
