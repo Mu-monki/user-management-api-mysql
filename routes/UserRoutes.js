@@ -6,6 +6,7 @@ const {
     createUser,
     updateUser,
     deleteUser,
+    deleteUsers
 } = require('../controllers/UserController');
 const { authenticate } = require('../middleware/Authentication');
 
@@ -17,5 +18,7 @@ router.route('/:id')
     .get(authenticate, getUser)
     .put(authenticate, updateUser)
     .delete(authenticate, deleteUser);
+router.route('/delete-batch')
+    .post(authenticate, deleteUsers)
 
 module.exports = router;

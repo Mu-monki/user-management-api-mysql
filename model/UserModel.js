@@ -95,6 +95,21 @@ const deleteUser = async (id) => {
     });
 }
 
+const deleteUsers = async (ids) => {
+    const query = "DELETE FROM users WHERE id in (?)";
+    const bindData = [
+        ids
+    ];
+    return new Promise((resolve, reject) => {
+        db.query(query, bindData, (err, res, fields) => {
+            if(err) {
+                throw err;
+            }
+            return resolve(res);
+        });
+    });
+}
+
 const getUserByEmail = async (email) => {
     const query = "SELECT * FROM users WHERE email = ? LIMIT 1";
     const bindData = [
@@ -116,5 +131,6 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
+    deleteUsers,
     getUserByEmail
 }

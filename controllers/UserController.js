@@ -99,10 +99,35 @@ const deleteUser = asyncHandler(async (req, res) => {
     });
 });
 
+const deleteUsers = asyncHandler(async (req, res) => {
+    const params = req.body;
+    let ids = null;
+    try {
+        ids = JSON.parse(params.ids);
+        console.log('ids', ids);
+    } catch (error) {
+        res.status(400);
+        console.log('error', error);
+        throw new Error('Bad Request');
+    }
+
+    // VALIDATION
+    // if(ids) {
+    //     res.status(400);
+    //     throw new Error('Bad Request');
+    // }
+    const data = await  UserModel.deleteUsers(ids);
+    res.status(200).json({
+        message: `Deleted Users ${ JSON.stringify(ids) }`,
+        data: data
+    });
+});
+
 module.exports = {
     getUsers,
     getUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    deleteUsers
 }
