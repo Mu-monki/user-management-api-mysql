@@ -5,6 +5,7 @@ const randomstring = require('randomstring');
 const BASE_URI = `/api`;
 const USER_PATH = `/users`;
 const UserModel = require('../../model/UserModel');
+const bcrypt = require('bcryptjs');
 
 describe('USER ROUTES', () => {
     const USER_URI = `${ BASE_URI + USER_PATH }`; 
@@ -68,7 +69,7 @@ describe('USER ROUTES', () => {
     
     describe('GET /api/users/:id', () => {
         const authToken = authenticatedUserToken();
-        const validUserId = '151d5223-6db7-426c-87c9-111c6ecd6d39';
+        const validUserId = 'default-user-id';
         const invalidUserId = 'abc';
         it('returns status code 200 if get user is successful', async () => {
             const res = await request(app).get(`${ USER_URI + '/' + validUserId }`)
@@ -98,16 +99,15 @@ describe('USER ROUTES', () => {
 
     describe('UPDATE /api/users/:id', () => {
         const authToken = authenticatedUserToken();
-        const validUserId = '151d5223-6db7-426c-87c9-111c6ecd6d39';
+        const validUserId = 'default-user-id';
         const params = {
-            first_name: randomstring.generate(7),
-            last_name: randomstring.generate(7),
+            first_name: 'John',
+            last_name: 'Doe',
             address: randomstring.generate(7),
             post_code: randomstring.generate(7),
             phone_number: randomstring.generate(7),
-            email: randomstring.generate(7),
-            username: randomstring.generate(7),
-            password: randomstring.generate(7),
+            email: 'test-admin@email.com',
+            username: 'tester-admin'
         };
 
         it('returns status code 200 if update user is successful', async () => {
@@ -142,7 +142,7 @@ describe('USER ROUTES', () => {
 
     describe('DELETE /api/users/:id', () => {
         const authToken = authenticatedUserToken();
-        const validUserId = '151d5223-6db7-426c-87c9-111c6ecd6d39';
+        const validUserId = 'default-user-id';
 
         it('returns status code 200 if update user is successful', async () => {
             const userParams = {

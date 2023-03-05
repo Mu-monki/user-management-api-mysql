@@ -9,7 +9,7 @@ describe('AUTH ROUTES', () => {
     
         it('returns status code 200 if login is successful', async () => {
             const params = {
-                email: 'francis@email.com',
+                email: 'test-admin@email.com',
                 password: 'Password_123'
             };
             const res = await request(app).post(`${ LOGIN_URI }`).send(params);

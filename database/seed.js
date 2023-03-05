@@ -5,8 +5,33 @@ const { v4: uuid, v4 } =  require('uuid');
 
 const default_iterations = 10;
 const iterations = process.env.npm_config_iterations? process.env.npm_config_iterations: default_iterations;
-let data_arr = [];
 
+// Create Default Test User
+const createDefaultUserQuery = "INSERT INTO users (id, first_name, last_name, address, post_code, phone_number, email, username, password, is_active) VALUES (?)";
+const params = [
+    'default-user-id',
+    'John',
+    'Doe',
+    '123 Test St',
+    '1010',
+    '(+63) 911 222 3333',
+    'test-admin@email.com',
+    'tester-admin',
+    bcrypt.hashSync('Password_123'),
+    1
+];
+db.query(
+    createDefaultUserQuery,
+    [params],
+    (err, res) => {
+        console.log('err', err);
+        console.log('res', res);
+    }
+);
+
+// Create Seeded Users
+const createUserQuery = "INSERT INTO users (id, first_name, last_name, address, post_code, phone_number, email, username, password, is_active) VALUES ?";
+let data_arr = [];
 for(let i = 0; i < iterations; i++) {
     const data = {
         id: v4(),
@@ -26,7 +51,6 @@ for(let i = 0; i < iterations; i++) {
 
 console.log('data_arr', data_arr);
 
-const createUserQuery = "INSERT INTO users (id, first_name, last_name, address, post_code, phone_number, email, username, password, is_active) VALUES ?";
 db.query(
     createUserQuery,
     [data_arr.map(data => [data.id, data.first_name, data.last_name, data.address, data.post_code, data.phone_number, data.email, data.username, data.password, data.is_active])],

@@ -55,7 +55,7 @@ const createUser = async (params) => {
 
 const updateUser = async (id, params) => {
     console.log('MODEL', id);
-    const query = "UPDATE users SET first_name = ?, last_name = ?, address = ?, post_code = ?, phone_number = ?, email = ?, username = ?, password = ?, updated_at = ?, is_active = ? WHERE id = ?";
+    const query = "UPDATE users SET first_name = ?, last_name = ?, address = ?, post_code = ?, phone_number = ?, email = ?, username = ?, updated_at = ?, is_active = ? WHERE id = ?";
     const datetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const bindData = [
         params.first_name,
@@ -65,7 +65,6 @@ const updateUser = async (id, params) => {
         params.phone_number,
         params.email,
         params.username,
-        bcrypt.hashSync(params.password),
         datetime,
         1,
         id

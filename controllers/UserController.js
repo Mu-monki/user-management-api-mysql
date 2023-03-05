@@ -66,8 +66,7 @@ const updateUser = asyncHandler(async (req, res) => {
         !params.post_code ||
         !params.phone_number ||
         !params.email ||
-        !params.username ||
-        !params.password
+        !params.username
     ) {
         res.status(400);
         throw new Error('Bad Request');
