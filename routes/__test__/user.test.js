@@ -144,7 +144,7 @@ describe('USER ROUTES', () => {
         const authToken = authenticatedUserToken();
         const validUserId = 'default-user-id';
 
-        it('returns status code 200 if update user is successful', async () => {
+        it('returns status code 200 if delete user is successful', async () => {
             const userParams = {
                 first_name: 'Dummy',
                 last_name: 'Dummyson',
@@ -183,6 +183,73 @@ describe('USER ROUTES', () => {
                             .set('Authorization', `Bearer ${ authToken }`)
                             .send();
             expect(res.statusCode).toEqual(404);
+        });
+    });
+
+    describe('POST /api/users/delete-batch', () => {
+        const authToken = authenticatedUserToken();
+        const validUserId = 'default-user-id';
+        const USER_DELETE_BATCH_PATH = '/delete-batch';
+
+        it('returns status code 200 if delete user is successful', async () => {
+            const userParamsFirst = {
+                first_name: 'Dummy',
+                last_name: 'Dummyson',
+                address: 'Dummy',
+                post_code: '0000',
+                phone_number: '+6391112223333',
+                email: 'dummy1@email.com',
+                username: 'dummy11',
+                password: 'dummypass1',
+            };
+            const userParamsSecond = {
+                first_name: 'Dummy',
+                last_name: 'Dummyson',
+                address: 'Dummy',
+                post_code: '0000',
+                phone_number: '+6391112223333',
+                email: 'dummy2@email.com',
+                username: 'dummy22',
+                password: 'dummypass2',
+            };
+            await UserModel.createUser(userParamsFirst);
+            await UserModel.createUser(userParamsSecond);
+            const resultFirst = await UserModel.getUserByEmail('dummy1@email.com');
+            const resultSecond = await UserModel.getUserByEmail('dummy2@email.com');
+            let users_arr = [];
+            if(resultFirst) {
+                users_arr.push(resultFirst[0].id);
+            }
+            if(resultSecond) {
+                users_arr.push(resultSecond[0].id);
+            }
+
+            const params = {
+                ids: JSON.stringify(users_arr)
+            };
+
+            const res = await request(app).post(`${ USER_URI + USER_DELETE_BATCH_PATH }`)
+                            .set('Authorization', `Bearer ${ authToken }`)
+                            .send(params);
+            expect(res.statusCode).toEqual(200);
+        });
+        it('returns status code 401 if there is no auth token', async () => {
+            const res = await request(app).post(`${ USER_URI + USER_DELETE_BATCH_PATH }`)
+                            .send();
+            expect(res.statusCode).toEqual(401);
+        });
+        it('returns status code 401 if the auth token is malformed', async () => {
+            const malformedAuth = 'ionvwoinvwev';
+            const res = await request(app).post(`${ USER_URI + USER_DELETE_BATCH_PATH }`)
+                            .set('Authorization', `Bearer ${ malformedAuth }`)
+                            .send();
+            expect(res.statusCode).toEqual(401);
+        });
+        it('returns status code 400 if invalid parameters', async () => {
+            const res = await request(app).post(`${ USER_URI + USER_DELETE_BATCH_PATH }`)
+                            .set('Authorization', `Bearer ${ authToken }`)
+                            .send();
+            expect(res.statusCode).toEqual(400);
         });
     });
 });
